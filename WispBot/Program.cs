@@ -33,9 +33,18 @@ namespace WispBot
             var guild = Environment.GetEnvironmentVariable("WISP_GUILD");
 
             if (guild is null)
-                slash.RegisterCommands<SlashModule>();
+            {
+                slash.RegisterCommands<MessageSlashModule>();
+                slash.RegisterCommands<ServerSlashModule>();
+                slash.RegisterCommands<MessageSlashModule>();
+            }
             else
-                slash.RegisterCommands<SlashModule>(ulong.Parse(guild));
+            {
+                slash.RegisterCommands<MessageSlashModule>(ulong.Parse(guild));
+                slash.RegisterCommands<ServerSlashModule>(ulong.Parse(guild));
+                slash.RegisterCommands<UserSlashModule>(ulong.Parse(guild));
+            }
+
             slash.SlashCommandErrored += (sender, args) =>
             {
                 Console.Error.Write(args.Exception);

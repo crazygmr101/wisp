@@ -10,7 +10,7 @@ using WispBot.Extensions;
 
 namespace WispBot.Modules
 {
-    public partial class SlashModule : SlashCommandModule
+    public class ServerSlashModule : SlashCommandModule
     {
         [SlashCommandGroup("server", "Commands to manage your server")]
         public class ServerGroup : SlashCommandModule

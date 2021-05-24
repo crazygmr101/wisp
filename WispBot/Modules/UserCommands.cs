@@ -9,7 +9,7 @@ using DSharpPlus.SlashCommands;
 namespace WispBot.Modules
 {
     // ReSharper disable once ClassNeverInstantiated.Global
-    public partial class SlashModule : SlashCommandModule
+    public class UserSlashModule : SlashCommandModule
     {
         [SlashCommandGroup("user", "Get user information")]
         public class UserInfoGroup : SlashCommandModule
