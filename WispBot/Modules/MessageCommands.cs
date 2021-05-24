@@ -1,3 +1,5 @@
+using System;
+using System.Linq;
 using System.Net.Mime;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
@@ -17,7 +19,18 @@ public class MessageSlashModule : SlashCommandModule
             long num = 100
         )
         {
-            // TODO
+            await ctx.CreateResponseAsync(
+                InteractionResponseType.DeferredChannelMessageWithSource,
+                new DiscordInteractionResponseBuilder().AsEphemeral(true)
+            );
+            var messagesToDelete =
+                (await ctx.Channel.GetMessagesAsync((int) num)).Where(x => (DateTimeOffset.UtcNow - x.Timestamp).TotalDays <= 14);
+            var messagesToDeleteAsAnArray = messagesToDelete as DiscordMessage[] ?? messagesToDelete.ToArray();
+
+            await ctx.Channel.DeleteMessagesAsync(messagesToDeleteAsAnArray);
+
+            await ctx.EditResponseAsync(
+                new DiscordWebhookBuilder().WithContent($"Deleted {messagesToDeleteAsAnArray.Length} messages."));
         }
     }
 
@@ -52,7 +65,7 @@ public class MessageSlashModule : SlashCommandModule
                     .WithContent("Sent!"));
         }
 
-        //[SlashCommand("embed", "Embed a message")]
+        [SlashCommand("embed", "Embed a message")]
         public async Task MessageEmbed(
             InteractionContext ctx,
             [Option("Content", "The plain text content of the embed")]
