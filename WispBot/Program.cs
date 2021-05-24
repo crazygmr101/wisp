@@ -6,6 +6,7 @@ using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using DSharpPlus;
 using DSharpPlus.SlashCommands;
+using Microsoft.Extensions.Logging;
 using WispBot.Modules;
 
 
@@ -24,7 +25,9 @@ namespace WispBot
             {
                 Token = Environment.GetEnvironmentVariable("WISP_TOKEN"),
                 TokenType = TokenType.Bot,
-                Intents = DiscordIntents.All
+                Intents = DiscordIntents.All,
+                MinimumLogLevel = LogLevel.Information,
+                LogTimestampFormat = "MM/dd/yy HH:mm:ss"
             });
             var slash = discord.UseSlashCommands();
             var guild = Environment.GetEnvironmentVariable("WISP_GUILD");
@@ -38,6 +41,7 @@ namespace WispBot
                 Console.Error.Write(args.Exception);
                 return Task.CompletedTask;
             };
+
             await discord.ConnectAsync();
             await Task.Delay(-1);
         }
