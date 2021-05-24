@@ -15,7 +15,6 @@ namespace WispBot
     {
         static void Main(string[] args)
         {
-            Console.Out.WriteLine(Environment.GetEnvironmentVariables());
             MainAsync().GetAwaiter().GetResult();
         }
 
@@ -34,8 +33,11 @@ namespace WispBot
                 slash.RegisterCommands<SlashModule>();
             else
                 slash.RegisterCommands<SlashModule>(ulong.Parse(guild));
-
-
+            slash.SlashCommandErrored += (sender, args) =>
+            {
+                Console.Error.Write(args.Exception);
+                return Task.CompletedTask;
+            };
             await discord.ConnectAsync();
             await Task.Delay(-1);
         }
